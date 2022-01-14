@@ -14,21 +14,22 @@ namespace PeopleAndBooks
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        
+        public Startup(IConfiguration configuration )
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
 
             services.AddControllers();
 
             services.AddDbContext<SqlServerContext>(options =>
                                 options.UseSqlServer(Configuration.GetConnectionString("SqlServerContext")));
+            
 
             // Versionamento da API - Precisa do nuget Microsoft.AspnetCore.Mvc.Versioning
             services.AddApiVersioning();
@@ -37,7 +38,7 @@ namespace PeopleAndBooks
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 
         }
-                
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

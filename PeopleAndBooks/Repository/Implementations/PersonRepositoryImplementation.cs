@@ -59,7 +59,7 @@ namespace PeopleAndBooks.Repository.Implementations
 
         public Person Update(Person person)
         {
-            if (!Exists(person)) return new Person();
+            if (!Exists(person)) return null;
             
             var result = _context.Person.SingleOrDefault(p => p.Id.Equals(person.Id));
             if (result != null)
