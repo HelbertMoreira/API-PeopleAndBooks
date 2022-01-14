@@ -5,10 +5,13 @@ using PeopleAndBooks.Services;
 
 namespace PeopleAndBooks.Controllers
 {
+    [ApiVersion("1")] // Adiciona na rota o número da versão da controller. 
     [ApiController]
-    [Route("api/[controller]")] // Modificando a rota desta controller
+    [Route("api/[controller]/v{version:apiversion}")] // Modificando a rota desta controller // Versionamento por controller
     public class PersonController : ControllerBase
     {
+
+        #region Injeção de dependência
         private readonly ILogger<PersonController> _logger;
         private readonly IPersonService _personService;
 
@@ -18,6 +21,9 @@ namespace PeopleAndBooks.Controllers
             _personService = personService;
         }
 
+        #endregion
+
+        #region EndPoints
         [HttpGet]
         public IActionResult Get()
         {
@@ -52,5 +58,6 @@ namespace PeopleAndBooks.Controllers
             _personService.Delete(id);
             return NoContent();
         }
+        #endregion
     }
 }
