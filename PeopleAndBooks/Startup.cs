@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PeopleAndBooks.Business;
+using PeopleAndBooks.Business.Implementations;
 using PeopleAndBooks.Data;
-using PeopleAndBooks.Services;
-using PeopleAndBooks.Services.Implementations;
+using PeopleAndBooks.Repository;
+using PeopleAndBooks.Repository.Implementations;
 
 namespace PeopleAndBooks
 {
@@ -31,7 +33,8 @@ namespace PeopleAndBooks
             // Versionamento da API - Precisa do nuget Microsoft.AspnetCore.Mvc.Versioning
             services.AddApiVersioning();
 
-            services.AddScoped<IPersonService, PersonServiceImplementation>();
+            services.AddScoped<IPersonRepositoy, PersonRepositoryImplementation>();
+            services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 
         }
                 

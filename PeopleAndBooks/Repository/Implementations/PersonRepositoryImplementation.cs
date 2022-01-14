@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PeopleAndBooks.Services.Implementations
+namespace PeopleAndBooks.Repository.Implementations
 {
-    public class PersonServiceImplementation : IPersonService
+    public class PersonRepositoryImplementation : IPersonRepositoy
     {
         private readonly SqlServerContext _context;
         
-        public PersonServiceImplementation(SqlServerContext context)
+        public PersonRepositoryImplementation(SqlServerContext context)
         {
             _context = context; 
         }
@@ -62,7 +62,7 @@ namespace PeopleAndBooks.Services.Implementations
             if (!Exists(person)) return new Person();
             
             var result = _context.Person.SingleOrDefault(p => p.Id.Equals(person.Id));
-            if (result == null)
+            if (result != null)
             {
                 try
                 {
@@ -78,7 +78,7 @@ namespace PeopleAndBooks.Services.Implementations
             return person;
         }
 
-        private bool Exists(Person person)
+        public bool Exists(Person person)
         {
             return _context.Person.Any(x => x.Id.Equals(person.Id));
         }
