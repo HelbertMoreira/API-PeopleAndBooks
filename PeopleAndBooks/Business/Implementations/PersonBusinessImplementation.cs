@@ -1,5 +1,5 @@
 ﻿using PeopleAndBooks.Model;
-using PeopleAndBooks.Repository;
+using PeopleAndBooks.Repository.Generic;
 using System.Collections.Generic;
 
 /*
@@ -12,8 +12,8 @@ namespace PeopleAndBooks.Business.Implementations
     public class PersonBusinessImplementation : IPersonBusiness
     {
         #region Injeção de dependência
-        private readonly IPersonRepositoy _repository;
-        public PersonBusinessImplementation(IPersonRepositoy repository)
+        private readonly IRepository<Person> _repository;
+        public PersonBusinessImplementation(IRepository<Person> repository)
         {
             _repository = repository;
         }

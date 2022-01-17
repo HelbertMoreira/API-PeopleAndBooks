@@ -1,8 +1,9 @@
-﻿namespace PeopleAndBooks.Model
+﻿using PeopleAndBooks.Model.Base;
+
+namespace PeopleAndBooks.Model
 {    
-    public class Person
+    public class Person : BaseEntity
     {
-        public int Id { get; set; }
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
         public string Address { get; set; }

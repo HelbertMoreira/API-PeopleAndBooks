@@ -7,8 +7,7 @@ using Microsoft.Extensions.Hosting;
 using PeopleAndBooks.Business;
 using PeopleAndBooks.Business.Implementations;
 using PeopleAndBooks.Data;
-using PeopleAndBooks.Repository;
-using PeopleAndBooks.Repository.Implementations;
+using PeopleAndBooks.Repository.Generic;
 
 namespace PeopleAndBooks
 {
@@ -34,11 +33,11 @@ namespace PeopleAndBooks
             // Versionamento da API - Precisa do nuget Microsoft.AspnetCore.Mvc.Versioning
             services.AddApiVersioning();
 
-            services.AddScoped<IPersonRepositoy, PersonRepositoryImplementation>();
-            services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-
-            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            
+            services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();            
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
         }
 
