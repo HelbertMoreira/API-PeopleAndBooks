@@ -1,14 +1,14 @@
-﻿using PeopleAndBooks.Model;
+﻿using PeopleAndBooks.DataConverter.Converter.VO;
 using System.Collections.Generic;
 
 namespace PeopleAndBooks.Business
 {
     public interface IPersonBusiness
     {
-        Person Create(Person person);
-        Person Update(Person person);
-        List<Person> FindAll();
-        Person FindById(int id);
+        PersonVO Create(PersonVO person);
+        PersonVO Update(PersonVO person);
+        List<PersonVO> FindAll();
+        PersonVO FindById(int id);
         void Delete(int id);
     }
 }
