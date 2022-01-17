@@ -12,5 +12,6 @@ namespace PeopleAndBooks.Data
         
 
         public DbSet<Person> Person { get; set; }
+        public DbSet<Book> Book { get; set; }
     }
 }

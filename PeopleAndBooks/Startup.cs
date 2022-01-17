@@ -37,6 +37,9 @@ namespace PeopleAndBooks
             services.AddScoped<IPersonRepositoy, PersonRepositoryImplementation>();
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 
+            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

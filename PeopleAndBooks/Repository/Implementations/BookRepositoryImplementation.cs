@@ -6,32 +6,32 @@ using System.Linq;
 
 namespace PeopleAndBooks.Repository.Implementations
 {
-    public class PersonRepositoryImplementation : IPersonRepositoy
+    public class BookRepositoryImplementation : IBookRepository
     {
         private readonly SqlServerContext _context;
-        
-        public PersonRepositoryImplementation(SqlServerContext context)
+
+        public BookRepositoryImplementation(SqlServerContext context)
         {
-            _context = context; 
+            _context = context;
         }
 
-        public List<Person> FindAll()
+        public List<Book> FindAll()
         {
-            return _context.Person.ToList();
+            return _context.Book.ToList();
         }
 
-        public Person FindById(int id)
+        public Book FindById(int id)
         {
-            return _context.Person.SingleOrDefault(x => x.Id.Equals(id));
+            return _context.Book.SingleOrDefault(x => x.Id.Equals(id));
         }
 
-        public Person Create(Person person)
+        public Book Create(Book book)
         {
             try
             {
-                _context.Add(person);
+                _context.Add(book);
                 _context.SaveChanges();
-                return person;
+                return book;
             }
             catch (Exception ex)
             {
@@ -41,12 +41,12 @@ namespace PeopleAndBooks.Repository.Implementations
 
         public void Delete(int id)
         {
-            var result = _context.Person.SingleOrDefault(p => p.Id.Equals(id));
+            var result = _context.Book.SingleOrDefault(p => p.Id.Equals(id));
             if (result != null)
             {
                 try
                 {
-                    _context.Person.Remove(result);
+                    _context.Book.Remove(result);
                     _context.SaveChanges();
                 }
                 catch (Exception ex)
@@ -54,32 +54,31 @@ namespace PeopleAndBooks.Repository.Implementations
                     throw;
                 }
             }
-        }                    
-
-        public Person Update(Person person)
-        {
-            if (!Exists(person)) return null;
-            
-            var result = _context.Person.SingleOrDefault(p => p.Id.Equals(person.Id));
-            if (result != null)
-            {
-                try
-                {
-                    _context.Entry(result).CurrentValues.SetValues(person);
-                    _context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-
-            }
-            return person;
         }
 
-        public bool Exists(Person person)
+        public Book Update(Book book)
         {
-            return _context.Person.Any(x => x.Id.Equals(person.Id));
+            if (!Exists(book)) return null;
+
+            var result = _context.Book.SingleOrDefault(p => p.Id.Equals(book.Id));
+            if (result != null)
+            {
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(book);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            return book;
+        }
+
+        public bool Exists(Book book)
+        {
+            return _context.Book.Any(x => x.Id.Equals(book.Id));
         }
     }
 }
