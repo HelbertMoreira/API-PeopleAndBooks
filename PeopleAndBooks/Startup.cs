@@ -26,7 +26,25 @@ namespace PeopleAndBooks
 
         
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
+            #region CORS
+            /*
+                CORS - Cross-Origin Resource Sharing (Compartilhamento de recursos com origens diferentes) 
+                é um mecanismo que usa cabeçalhos adicionais HTTP para informar a um navegador que permita 
+                que um aplicativo Web seja executado em uma origem (domínio) com permissão para acessar 
+                recursos selecionados de um servidor em uma origem distinta.
+
+             */
+
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }));
+
+            #endregion
+
 
             services.AddControllers();
 
@@ -78,6 +96,9 @@ namespace PeopleAndBooks
             });
             #endregion
 
+            #region HATEOAS
+            #endregion
+            
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();            
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
 
@@ -95,6 +116,17 @@ namespace PeopleAndBooks
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            #region CORS
+            /*
+                Para esta configuração devemos nos atenta a seguintes regras:
+
+                - Em "Configure", esta implementação do CORS deve ficar depois de:
+                    * app.UseHttpsRedirection()
+                    * app.UseRouting()
+             */
+            app.UseCors();
+            #endregion
 
             #region SWAGGER
             app.UseSwagger();
