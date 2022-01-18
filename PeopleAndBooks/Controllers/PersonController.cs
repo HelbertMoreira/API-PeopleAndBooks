@@ -2,36 +2,45 @@
 using Microsoft.Extensions.Logging;
 using PeopleAndBooks.Business;
 using PeopleAndBooks.DataConverter.Converter.VO;
-using PeopleAndBooks.Model;
+using System.Collections.Generic;
 
 namespace PeopleAndBooks.Controllers
 {
-    [ApiVersion("1")] // Adiciona na rota o número da versão da controller. 
+    [ApiVersion("1")] // -- VERSIONAMENTO DA API -- Adiciona na rota o número da versão da controller. 
     [ApiController]
-    [Route("api/[controller]/v{version:apiversion}")] // Modificando a rota desta controller // Versionamento por controller
+    [Route("api/[controller]/v{version:apiversion}")] // Modificando a rota desta controller
     public class PersonController : ControllerBase
     {
 
         #region Injeção de dependência
         private readonly ILogger<PersonController> _logger;
+
         private readonly IPersonBusiness _personBusiness;
 
         public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
         {
             _logger = logger;
-            _personBusiness = personBusiness;   
+            _personBusiness = personBusiness;
         }
 
         #endregion
 
         #region EndPoints
-        [HttpGet]
+        [HttpGet]  
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))] // Anotation para customização do swagger
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public IActionResult Get(int id)
         {
             var person = _personBusiness.FindById(id);
@@ -40,6 +49,9 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
@@ -47,6 +59,9 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Put([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
@@ -54,6 +69,7 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((204))]
         public IActionResult Delete(int id)
         {
             _personBusiness.Delete(id);
