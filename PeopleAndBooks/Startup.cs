@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
@@ -5,13 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using PeopleAndBooks.Business;
 using PeopleAndBooks.Business.Implementations;
 using PeopleAndBooks.Data;
 using PeopleAndBooks.Repository.Generic;
+using PeopleAndBooks.Repository.User;
+using PeopleAndBooks.Repository.User.Implementation;
+using PeopleAndBooks.System.Configuration.Token;
+using PeopleAndBooks.System.Configuration.Token.Services;
 using System;
+using System.Text;
 
 namespace PeopleAndBooks
 {
@@ -24,9 +33,47 @@ namespace PeopleAndBooks
             Configuration = configuration;
         }
 
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
+            #region JWT TOKEN CONFIGURE
+            var tokenConfigurations = new TokenConfiguration();
+
+            new ConfigureFromConfigurationOptions<TokenConfiguration>(
+                        Configuration.GetSection("TokenConfiguration")
+                ).Configure(tokenConfigurations);
+
+            services.AddSingleton(tokenConfigurations);
+
+            //Add as configurações de autenticação...
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = tokenConfigurations.Issuer,
+                        ValidAudience = tokenConfigurations.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
+                    };
+                });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+            #endregion
+
             #region CORS
             /*
                 CORS - Cross-Origin Resource Sharing (Compartilhamento de recursos com origens diferentes) 
@@ -45,12 +92,10 @@ namespace PeopleAndBooks
 
             #endregion
 
-
             services.AddControllers();
 
             services.AddDbContext<SqlServerContext>(options =>
                                 options.UseSqlServer(Configuration.GetConnectionString("SqlServerContext")));
-
 
             #region CONTENT NEGOTIATION
 
@@ -98,12 +143,17 @@ namespace PeopleAndBooks
 
             #region HATEOAS
             #endregion
-            
+
+            #region JWT TOKEN
+            services.AddTransient<TokenService>();
+            #endregion
+
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();            
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+            services.AddScoped<ILogin, LoginBusinessImplementationcs>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

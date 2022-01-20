@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PeopleAndBooks.Business;
 using PeopleAndBooks.DataConverter.Converter.VO;
@@ -8,6 +9,7 @@ namespace PeopleAndBooks.Controllers
 {
     [ApiVersion("1")] // -- VERSIONAMENTO DA API -- Adiciona na rota o número da versão da controller. 
     [ApiController]
+    [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiversion}")] // Modificando a rota desta controller
     public class PersonController : ControllerBase
     {
