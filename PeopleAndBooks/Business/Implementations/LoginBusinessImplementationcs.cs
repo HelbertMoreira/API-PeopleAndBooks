@@ -1,4 +1,5 @@
 ﻿using PeopleAndBooks.DataConverter.VO;
+using PeopleAndBooks.Model;
 using PeopleAndBooks.Repository.User;
 using PeopleAndBooks.System.Configuration.Token;
 using PeopleAndBooks.System.Configuration.Token.Services;
@@ -41,6 +42,36 @@ namespace PeopleAndBooks.Business.Implementations
             user.Token = refreshToken;
             user.RefreshToken = DateTime.Now.AddDays(_configuration.DaysToExpiry);
 
+            return AtualizaUserSystem(user, accessToken, refreshToken);      
+        }
+
+        public TokenVO ValidateCredentials(TokenVO tokenVO)
+        {
+            var accessToken = tokenVO.AccessToken;
+            var refreshToken = tokenVO.RefreshToken;
+            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+            var userName = principal.Identity.Name;
+
+            var user = _repository.ValidateCredentials(userName);
+
+            if (user == null || user.Token != refreshToken || user.RefreshToken <= DateTime.Now) return null;
+
+            accessToken = _tokenService.GenerateAccessToken(principal.Claims);
+            refreshToken = _tokenService.GenerateRefreshToken();
+
+            user.Token = refreshToken;
+
+            return AtualizaUserSystem(user, accessToken, refreshToken);
+
+        }
+
+        public bool RvokeToken(string userName)
+        {
+            return _repository.RevokeToken(userName);
+        }
+
+        private TokenVO AtualizaUserSystem(UserSystem user, string accessToken, string refreshToken)
+        {
             _repository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
@@ -52,7 +83,12 @@ namespace PeopleAndBooks.Business.Implementations
                 expirationDate.ToString(DATE_FORMAT),
                 accessToken,
                 refreshToken
-                );            
+                );
+        }
+
+        public bool RevokeToken(string userName)
+        {
+            return _repository.RevokeToken(userName);   
         }
     }
 }

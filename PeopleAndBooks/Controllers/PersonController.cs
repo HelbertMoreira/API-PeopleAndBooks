@@ -28,7 +28,8 @@ namespace PeopleAndBooks.Controllers
         #endregion
 
         #region EndPoints
-        [HttpGet]  
+        [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType((200), Type = typeof(List<PersonVO>))] // Anotation para customização do swagger
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -39,6 +40,7 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize("Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -51,6 +53,7 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpPost]
+        [Authorize("Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType((400))]
         [ProducesResponseType((401))]
@@ -61,6 +64,7 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpPut]
+        [Authorize("Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType((400))]
         [ProducesResponseType((401))]
@@ -71,6 +75,7 @@ namespace PeopleAndBooks.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize("Bearer")]
         [ProducesResponseType((204))]
         public IActionResult Delete(int id)
         {

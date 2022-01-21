@@ -20,8 +20,22 @@ namespace PeopleAndBooks.Repository.User.Implementation
         public UserSystem ValidateCredentials(UserSystemVO user)
         {
             var pass = ComputeHash(user.Password, new SHA256CryptoServiceProvider());            
-            return _context.Users.FirstOrDefault(u => (u.Login == user.Login) && (u.Senha == pass));
-            
+            return _context.Users.FirstOrDefault(u => (u.Login == user.Login) && (u.Senha == pass));            
+        }
+
+        public UserSystem ValidateCredentials(string userName)
+        {
+            return _context.Users.FirstOrDefault(u => (u.Login == userName));
+        }
+
+        public bool RevokeToken(string userName)
+        {
+            var user = _context.Users.FirstOrDefault(u => (u.Login == userName));
+            if (user is null) return false;
+
+            user.Token = null;
+            _context.SaveChanges();
+            return true;
         }
 
         public UserSystem RefreshUserInfo(UserSystem user)
