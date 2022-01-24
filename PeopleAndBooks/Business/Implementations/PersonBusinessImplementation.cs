@@ -1,6 +1,7 @@
 ﻿using PeopleAndBooks.DataConverter.Converter.Implementation;
 using PeopleAndBooks.DataConverter.Converter.VO;
 using PeopleAndBooks.Model;
+using PeopleAndBooks.Repository;
 using PeopleAndBooks.Repository.Generic;
 using System.Collections.Generic;
 
@@ -14,9 +15,9 @@ namespace PeopleAndBooks.Business.Implementations
     public class PersonBusinessImplementation : IPersonBusiness
     {
         #region Injeção de dependência
-        private readonly IRepository<Person> _repository;
+        private readonly IPersonRepository _repository;
         private readonly PersonConverter _converter;
-        public PersonBusinessImplementation(IRepository<Person> repository)
+        public PersonBusinessImplementation(IPersonRepository repository)
         {
             _repository = repository;
             _converter = new PersonConverter();
@@ -50,11 +51,17 @@ namespace PeopleAndBooks.Business.Implementations
             personEntity = _repository.Update(personEntity);
             return _converter.Parse(personEntity);
         }
+        public PersonVO DisableOrEnable(int id)
+        {
+            var personEntity = _repository.DisableOrEnable(id);
+            return _converter.Parse(personEntity);
+        }
 
         public void Delete(int id)
         {
             _repository.Delete(id);
         }
+
         #endregion
     }
 }

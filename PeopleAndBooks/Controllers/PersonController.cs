@@ -74,6 +74,18 @@ namespace PeopleAndBooks.Controllers
             return Ok(_personBusiness.Update(person));
         }
 
+        [HttpPatch("{id}")]
+        [Authorize("Bearer")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult DisableOrEnable(int id)
+        {
+            var person = _personBusiness.DisableOrEnable(id);
+            return Ok(person);
+        }
+
         [HttpDelete("{id}")]
         [Authorize("Bearer")]
         [ProducesResponseType((204))]

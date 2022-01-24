@@ -10,5 +10,6 @@ namespace PeopleAndBooks.Business
         List<PersonVO> FindAll();
         PersonVO FindById(int id);
         void Delete(int id);
+        PersonVO DisableOrEnable(int id);
     }
 }

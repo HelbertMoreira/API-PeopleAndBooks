@@ -28,5 +28,8 @@ namespace PeopleAndBooks.DataConverter.Converter.VO
 
         [JsonIgnore]
         public string Gender { get; set; }
+
+        [JsonPropertyName("Ativo")]
+        public bool Ativo { get; set; }
     }
 }

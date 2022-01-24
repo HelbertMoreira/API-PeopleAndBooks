@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using PeopleAndBooks.Business;
 using PeopleAndBooks.Business.Implementations;
 using PeopleAndBooks.Data;
+using PeopleAndBooks.Repository;
 using PeopleAndBooks.Repository.Generic;
 using PeopleAndBooks.Repository.User;
 using PeopleAndBooks.Repository.User.Implementation;
@@ -152,6 +153,7 @@ namespace PeopleAndBooks
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
             services.AddScoped<ILogin, LoginBusinessImplementationcs>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         }

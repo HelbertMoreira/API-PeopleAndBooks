@@ -9,7 +9,7 @@ namespace PeopleAndBooks.Repository.Generic
 {
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private SqlServerContext _context;
+        protected SqlServerContext _context;
         private DbSet<T> dataset;
 
         public GenericRepository(SqlServerContext context)

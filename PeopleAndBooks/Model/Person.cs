@@ -16,5 +16,8 @@ namespace PeopleAndBooks.Model
 
         [Display(Name = "Gênero")]
         public string Gender { get; set; }
+
+        [Display(Name = "Ativo")]
+        public bool Ativo { get; set; }
     }
 }
