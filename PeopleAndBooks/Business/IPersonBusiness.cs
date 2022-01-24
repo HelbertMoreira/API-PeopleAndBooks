@@ -1,4 +1,5 @@
 ﻿using PeopleAndBooks.DataConverter.Converter.VO;
+using PeopleAndBooks.DataConverter.Utils;
 using System.Collections.Generic;
 
 namespace PeopleAndBooks.Business
@@ -12,5 +13,7 @@ namespace PeopleAndBooks.Business
         List<PersonVO> FindByName(string nome, string sobrenome);
         void Delete(int id);
         PersonVO DisableOrEnable(int id);
+
+        PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDiretion, int pageSize, int currentPage);
     }
 }

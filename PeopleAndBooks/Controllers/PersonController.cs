@@ -28,6 +28,11 @@ namespace PeopleAndBooks.Controllers
         #endregion
 
         #region EndPoints
+        
+        // Após a implementação do método de busca paginada, este código já não faz mais sentido, pois fará praticamente
+        // a msma coisa do que faz uma busca paginada.
+        
+        /*
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType((200), Type = typeof(List<PersonVO>))] // Anotation para customização do swagger
@@ -37,6 +42,22 @@ namespace PeopleAndBooks.Controllers
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
+        }
+        */
+
+        [HttpGet("{sortDirection}/{pageSize}/{currentPage}")]
+        [Authorize("Bearer")]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))] // Anotation para customização do swagger
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult Get(
+            [FromQuery] string name,
+            string sortDirection,
+            int pageSize,
+            int currentPage)
+        {
+            return Ok(_personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, currentPage));
         }
 
         [HttpGet("{id}")]

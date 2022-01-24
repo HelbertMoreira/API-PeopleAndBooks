@@ -11,5 +11,7 @@ namespace PeopleAndBooks.Repository.Generic
         T FindById(int id);
         void Delete(int id);
         bool Exists(T item);
+        List<T> FindWithPagedShearch(string query);
+        int GetCount(string query);
     }
 }
