@@ -52,6 +52,18 @@ namespace PeopleAndBooks.Controllers
             return Ok(person);
         }
 
+        [HttpGet("findPersonByName")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public IActionResult FindByName([FromQuery] string nome, [FromQuery] string sobrenome)
+        {
+            var person = _personBusiness.FindByName(nome, sobrenome);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
         [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(200)]

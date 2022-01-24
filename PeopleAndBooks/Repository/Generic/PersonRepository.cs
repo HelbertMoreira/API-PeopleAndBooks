@@ -1,6 +1,7 @@
 ﻿using PeopleAndBooks.Data;
 using PeopleAndBooks.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PeopleAndBooks.Repository.Generic
@@ -32,6 +33,27 @@ namespace PeopleAndBooks.Repository.Generic
                 }
             }
             return person;
+        }
+
+        public List<Person> FindByName(string nome, string sobrenome)
+        {
+            if (!string.IsNullOrWhiteSpace(nome) && !string.IsNullOrWhiteSpace(sobrenome))
+            {
+                return _context.Person.Where(
+                    p => p.First_Name.Contains(nome) && 
+                    p.Last_Name.Contains(sobrenome)).ToList();
+            }
+            else if (string.IsNullOrWhiteSpace(nome) && !string.IsNullOrWhiteSpace(sobrenome))
+            {
+                return _context.Person.Where(
+                    p => p.Last_Name.Contains(sobrenome)).ToList();
+            }
+            else if (!string.IsNullOrWhiteSpace(nome) && string.IsNullOrWhiteSpace(sobrenome))
+            {
+                return _context.Person.Where(
+                    p => p.First_Name.Contains(nome)).ToList();
+            }
+            else return null;
         }
     }
 }

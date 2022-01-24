@@ -32,7 +32,8 @@ namespace PeopleAndBooks.DataConverter.Converter.Implementation
                 First_Name = origin.First_Name,
                 Last_Name = origin.Last_Name,
                 Address = origin.Address,
-                Gender = origin.Gender
+                Gender = origin.Gender,
+                Ativo = origin.Ativo
             };
         }
 

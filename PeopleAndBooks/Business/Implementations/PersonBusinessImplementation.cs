@@ -35,6 +35,11 @@ namespace PeopleAndBooks.Business.Implementations
             return _converter.Parse(_repository.FindById(id));
         }
 
+        public List<PersonVO> FindByName(string nome, string sobrenome)
+        {
+            return _converter.Parse(_repository.FindByName(nome, sobrenome));
+        }
+
         public PersonVO Create(PersonVO person)
         {
             //Converte PersonVO recebido como parâmetro...
@@ -61,6 +66,7 @@ namespace PeopleAndBooks.Business.Implementations
         {
             _repository.Delete(id);
         }
+
 
         #endregion
     }

@@ -9,6 +9,7 @@ namespace PeopleAndBooks.Business
         PersonVO Update(PersonVO person);
         List<PersonVO> FindAll();
         PersonVO FindById(int id);
+        List<PersonVO> FindByName(string nome, string sobrenome);
         void Delete(int id);
         PersonVO DisableOrEnable(int id);
     }
