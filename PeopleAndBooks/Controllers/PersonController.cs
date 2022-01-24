@@ -11,7 +11,7 @@ namespace PeopleAndBooks.Controllers
     [ApiController]
     [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiversion}")] // Modificando a rota desta controller
-    public class PersonController : ControllerBase
+    public class PersonController : Controller
     {
 
         #region Injeção de dependência

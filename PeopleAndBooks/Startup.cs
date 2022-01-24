@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -149,11 +151,17 @@ namespace PeopleAndBooks
             services.AddTransient<TokenService>();
             #endregion
 
+            #region FILE IO
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IFileBusiness, FileBusinessImplementation>();
+            #endregion
+
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();            
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
             services.AddScoped<ILogin, LoginBusinessImplementationcs>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         }
